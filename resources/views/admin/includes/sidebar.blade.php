@@ -14,7 +14,7 @@
           <img src="/adminAssets/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">Alexander Pierce</a>
+          <a href="#" class="d-block">{{ ucwords(Auth::user()->name) }}</a>
         </div>
       </div>
 
@@ -58,13 +58,13 @@
               </li>
             </ul>
           </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-th"></i>
-              <p>
-                Simple Link
-                <span class="right badge badge-danger">New</span>
-              </p>
+
+          <li class="nav-item" onclick="$('#logout_btn').click()">
+            <a href="#" class="nav-link" >
+              <form action="{{ route('logout') }}" method="POST" >
+                @csrf
+                <button id="logout_btn">logout</button>
+              </form>
             </a>
           </li>
         </ul>

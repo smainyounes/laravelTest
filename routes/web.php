@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\FormationController;
 
 /*
@@ -19,14 +20,24 @@ use App\Http\Controllers\Admin\FormationController;
 //     return view('welcome');
 // });
 
+Route::get('/login', [AuthController::class, 'loginView'])->name('login')->middleware('guest');
+Route::post('/login', [AuthController::class, 'login'])->name('login')->middleware('guest');
+
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
+
+
+Route::get('/register', [AuthController::class, 'registerView'])->name('register')->middleware('guest');
+Route::post('/register', [AuthController::class, 'register'])->name('register')->middleware('guest');
+
+
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/contactez', [HomeController::class, 'contact'])->name('contact');
 
-Route::prefix('admin')->group(function () {
+Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::get('/', function ()
     {
         return view('admin.dashboard');
-    });
+    })->name('dashboard');
 
     Route::prefix('formation')->group(function () {
         Route::get('/', [FormationController::class, 'index'])->name('formation.index');
@@ -37,7 +48,5 @@ Route::prefix('admin')->group(function () {
         Route::post('/destroy/{id}', [FormationController::class, 'destroy'])->name('formation.destroy');
         
     });
-
-
     
 });
